@@ -40,10 +40,31 @@ pipeline {
                 }
             }
         }
+
+        stage("OWASP Dependency Check"){
+            steps{
+                dependencyCheck additionalArguments: '--scan ./ ', odcInstallation: 'DP-Check'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
         
          stage("Build"){
             steps{
                 sh " mvn clean install"
+            }
+        }
+        stage('Build docker image'){
+            steps{
+                script{
+                    sh 'docker build -t nareshbabu1991/petclinic .'
+                }
+            }
+        }
+        stage('Build docker santa image'){
+            steps{
+                script{
+                    sh 'docker build -t nareshbabu1991/secretsanta .'
+                }
             }
         }
     }
