@@ -53,17 +53,23 @@ pipeline {
                 sh " mvn clean install"
             }
         }
+
         stage('Build docker image'){
             steps{
                 script{
-                    sh 'docker build -t nareshbabu1991/petclinic .'
+                    sh 'docker build -t nareshbabu1991/secretsanta .'
                 }
             }
         }
-        stage('Build docker santa image'){
+
+        stage("Docker Push to Dockerhub"){
             steps{
                 script{
-                    sh 'docker build -t nareshbabu1991/secretsanta .'
+                   withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                        
+                        sh "docker tag nareshbabu1991/secretsanta nareshbabu1991/secretsanta:latest "
+                        sh "docker push nareshbabu1991/secretsanta:latest "
+                    }
                 }
             }
         }
