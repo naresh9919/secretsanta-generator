@@ -14,7 +14,7 @@ pipeline {
         
         stage("Git Checkout"){
             steps{
-                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/naresh9919/secretsanta-generator.git'
+                git branch: 'master', changelog: false, poll: false, url: 'https://github.com/naresh9919/secretsanta-generator.git'
             }
         }
         
@@ -54,7 +54,7 @@ pipeline {
             }
         }
 
-        stage('Build docker image'){
+        stage('Build docker santa image'){
             steps{
                 script{
                     sh 'docker build -t nareshbabu1991/secretsanta .'
@@ -62,7 +62,7 @@ pipeline {
             }
         }
 
-        stage("Docker Push to Dockerhub"){
+        stage("Docker Build & Push"){
             steps{
                 script{
                    withDockerRegistry(credentialsId: 'dockerhub-cred', toolName: 'docker') {
