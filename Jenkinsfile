@@ -14,7 +14,7 @@ pipeline {
         
         stage("Git Checkout"){
             steps{
-                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/naresh9919/secretsanta-generator.git'
+                git branch: 'master', changelog: false, poll: false, url: 'https://github.com/naresh9919/secretsanta-generator.git'
             }
         }
         
