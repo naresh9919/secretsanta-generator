@@ -78,7 +78,7 @@ pipeline {
                 script{
                    withDockerRegistry(credentialsId: 'dockerhub-cred', toolName: 'docker') {
                         
-                        sh "docker run -d --name secretsanta1 -p 8081:8081 nareshbabu1991/secretsanta:latest "
+                        sh "docker run -d --name secretsanta2 -p 8081:8081 nareshbabu1991/secretsanta:latest "
                     }
                 }
             }
