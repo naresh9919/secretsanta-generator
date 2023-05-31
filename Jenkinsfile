@@ -41,6 +41,14 @@ pipeline {
             }
         }
 
+        stage("deploy to tomcat"){
+            steps{
+                sshagent(['tomcat-privatekey']) {
+                    sh "scp -o StrictHostKeyChecking=no target/secretsanta-0.0.1-SNAPSHOT.jar ubuntu@13.233.120.37:/opt/tomcat/webapps"
+                }
+            }
+        }
+
         stage("OWASP Dependency Check"){
             steps{
                 dependencyCheck additionalArguments: '--scan ./ ', odcInstallation: 'DP-Check'
@@ -80,6 +88,14 @@ pipeline {
                         
                         sh "docker run -d --name secretsanta3 -p 8084:8084 nareshbabu1991/secretsanta:latest "
                     }
+                }
+            }
+        }
+
+        stage('trivy'){
+            steps{
+                script{
+                    sh 'trivy fs --security-check vuln,config /var/lib/jenkins/workspace/target'
                 }
             }
         }
