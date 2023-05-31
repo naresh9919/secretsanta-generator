@@ -29,6 +29,14 @@ pipeline {
                 sh "mvn test"
             }
         }
+
+        stage("deploy to tomcat"){
+            steps{
+                sshagent(['tomcat-privatekey']) {
+                    sh "scp -o StrictHostKeyChecking=no target/secretsanta-0.0.1-SNAPSHOT.jar ubuntu@13.233.120.37:/opt/tomcat/webapps"
+                }
+            }
+        }
         
         stage("Sonarqube Analysis "){
             steps{
@@ -37,14 +45,6 @@ pipeline {
                     -Dsonar.java.binaries=. \
                     -Dsonar.projectKey=secretsanta '''
     
-                }
-            }
-        }
-
-        stage("deploy to tomcat"){
-            steps{
-                sshagent(['tomcat-privatekey']) {
-                    sh "scp -o StrictHostKeyChecking=no target/secretsanta-0.0.1-SNAPSHOT.jar ubuntu@13.233.120.37:/opt/tomcat/webapps"
                 }
             }
         }
@@ -95,7 +95,7 @@ pipeline {
         stage('trivy'){
             steps{
                 script{
-                    sh 'trivy fs --security-check vuln,config /var/lib/jenkins/workspace/target'
+                    sh 'trivy fs --security-check vuln,config /var/lib/jenkins/workspace/secratesanta'
                 }
             }
         }
